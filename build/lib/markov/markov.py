@@ -46,7 +46,7 @@ def run():
 
     # Iterate through each name and, using the predetermined probabilities of one letter following another, choose the next letters randomly
     for name in names:
-        while len(name) < args.l:
+        while len(name) < args.l: # TODO FIX THIS BUG IMMEDIATELY
             choices = counters[name[-1]].elements()
             name += random.choice(list(choices))
         print name
