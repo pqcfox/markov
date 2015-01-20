@@ -15,7 +15,7 @@ def run():
     parser = argparse.ArgumentParser(
         description='Generate a word using a Markov chain.')
     parser.add_argument(
-        '-l', metavar='length', help='length of outputted strings', type=int, default=10)
+        '-l', metavar='length', help='length of outputted strings', type=int, default=None)
     parser.add_argument(
         '-c', metavar='count', help='number of outputted strings', type=int, default=1)
     parser.add_argument(
@@ -40,13 +40,25 @@ def run():
     for word in words:
         for index in range(len(word) - 1):
             counters[word[index]][word[index + 1]] += 1
+        # Add an "end of word" character (None) onto the last character's counter
+        if args.l is None:
+            counters[word[-1]][None] += 1
 
-    # Make a list of strings starting with random letters
+    # Make a list of strings starting with random characters previously found 
     names = [random.choice(counters.keys()) for _ in range(args.c)]
 
     # Iterate through each name and, using the predetermined probabilities of one letter following another, choose the next letters randomly
     for name in names:
-        while len(name) < args.l: # TODO FIX THIS BUG IMMEDIATELY
-            choices = counters[name[-1]].elements()
-            name += random.choice(list(choices))
+        if args.l is None:
+            while True: 
+                choices = counters[name[-1]].elements()
+                choice = random.choice(list(choices))
+                if choice is None:
+                    break
+                name += choice
+        else:
+            while len(name) < args.l:
+                choices = counters[name[-1]].elements()
+                name += random.choice(list(choices))
+
         print name
