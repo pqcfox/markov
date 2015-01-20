@@ -8,5 +8,4 @@ To run the program, simply type `markov`. For fun (on Mac OSX), type in `watch '
 
 FEATURES (upcoming):
 
-Will have an "end of word" character, making lengths not required.
 For known files, will read/write frequency files making chain generation faster.
